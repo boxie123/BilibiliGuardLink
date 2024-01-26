@@ -8,7 +8,7 @@
 // @license     MIT
 // @include     /https?:\/\/live\.bilibili\.com\/(blanc\/)?\d+\??.*/
 // @icon        https://www.google.com/s2/favicons?domain=bilibili.com
-// @description Bilibili大航海列表点击跳转
+// @description 为Bilibili直播间的大航海列表添加点击跳转功能
 // @require     https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js
 // ==/UserScript==
 
