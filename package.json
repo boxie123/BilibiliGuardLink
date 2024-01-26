@@ -1,0 +1,14 @@
+{
+  "devDependencies": {
+    "@types/jquery": "^3.5.29"
+  },
+  "name": "bilibiliguardlink",
+  "version": "0.1.0",
+  "description": "为大航海列表添加链接",
+  "main": "main.user.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "boxie123",
+  "license": "MIT"
+}
