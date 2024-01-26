@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        Bilibili大航海列表点击跳转
 // @namespace   https://space.bilibili.com/35192025
-// @version     0.1.0
+// @version     0.2.0
 // @supportURL  https://space.bilibili.com/35192025
 // @grant       none
 // @author      铂屑
@@ -15,25 +15,56 @@
 (async function () {
     'use strict';
 
-    while ($('#rank-list-ctnr-box .rank-list-cntr .rank-list-box .list div[role="listitem"]').length == 0) {
+    async function addEventToGuardList() {
+        while ($('#rank-list-ctnr-box .rank-list-cntr .rank-list-box .list div[role="listitem"]').length == 0) {
+            console.warn(`找不到大航海元素，退出。`)
+            return
+        }
+
+        let userList = $('#rank-list-ctnr-box .rank-list-cntr .rank-list-box .list div[role="listitem"]')
+        // console.log(userList)
+        userList.map(function (num) {
+            let userInfo = $(this).children('webcomponent-userinfo').first()
+            let userInfoJson = JSON.parse(userInfo?.attr('userinfo'))
+            let uid = userInfoJson.uinfo.uid   // 获取uid
+            // console.log(uid)
+            let unameDom = document.querySelectorAll('#rank-list-ctnr-box .rank-list-cntr .rank-list-box .list div[role="listitem"] webcomponent-userinfo')[num].shadowRoot?.querySelector('span.uname')
+            // console.log(unameDom)
+    
+            // 操作内部元素
+            unameDom?.addEventListener('click', function () {
+                window.open('https://space.bilibili.com/' + uid);
+            });
+            return this
+        })
+    }
+    while ($('#rank-list-ctnr-box .rank-list-cntr .rank-list-box').length == 0) {
         console.warn(`找不到大航海元素，等待3秒。`)
         await new Promise((res,) => setTimeout(res, 3000)) // wait 3 seconds
     }
-
-    let userList = $('#rank-list-ctnr-box .rank-list-cntr .rank-list-box .list div[role="listitem"]')
-    console.log(userList)
-    userList.map(function (num) {
-        let userInfo = $(this).children('webcomponent-userinfo').first()
-        let userInfoJson = JSON.parse(userInfo?.attr('userinfo'))
-        let uid = userInfoJson.uinfo.uid   // 获取uid
-        console.log(uid)
-        let unameDom = document.querySelectorAll('#rank-list-ctnr-box .rank-list-cntr .rank-list-box .list div[role="listitem"] webcomponent-userinfo')[num].shadowRoot?.querySelector('span.uname')
-        console.log(unameDom)
-
-        // 操作内部元素
-        unameDom?.addEventListener('click', function () {
-            window.open('https://space.bilibili.com/' + uid);
-        });
-        return this
-    })
+    try {
+        var eventflag = true;
+        var listBox = document.querySelector("#rank-list-ctnr-box .rank-list-cntr .rank-list-box");
+        //以下代码为监控整个Body元素的变化
+        var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+        if (MutationObserver) {
+            var MutationObserverConfig = {
+                childList: true,
+                subtree: true,
+            };
+            var observer = new MutationObserver(async function (mutations) {
+                await addEventToGuardList();
+            });
+            observer.observe(listBox, MutationObserverConfig);
+        }
+        else if (listBox?.addEventListener) {
+            listBox.addEventListener("DOMSubtreeModified", async function (evt) {
+                await addEventToGuardList();
+            }, false);
+        }else {
+            await addEventToGuardList();
+        }
+    } catch (error) {
+        console.log(error)
+    }
 })().catch(console.warn);
