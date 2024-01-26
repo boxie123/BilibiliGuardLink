@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        Bilibili大航海列表点击跳转
 // @namespace   https://space.bilibili.com/35192025
-// @version     0.2.0
+// @version     0.2.1
 // @supportURL  https://space.bilibili.com/35192025
 // @grant       none
 // @author      铂屑
@@ -17,7 +17,7 @@
 
     async function addEventToGuardList() {
         while ($('#rank-list-ctnr-box .rank-list-cntr .rank-list-box .list div[role="listitem"]').length == 0) {
-            console.warn(`找不到大航海元素，退出。`)
+            // console.warn(`找不到大航海元素，退出。`)
             return
         }
 
@@ -38,13 +38,13 @@
             return this
         })
     }
-    while ($('#rank-list-ctnr-box .rank-list-cntr .rank-list-box').length == 0) {
-        console.warn(`找不到大航海元素，等待3秒。`)
+    while ($('#rank-list-ctnr-box .tab-content ').length == 0) {
+        // console.warn(`找不到排行，等待3秒。`)
         await new Promise((res,) => setTimeout(res, 3000)) // wait 3 seconds
     }
     try {
         var eventflag = true;
-        var listBox = document.querySelector("#rank-list-ctnr-box .rank-list-cntr .rank-list-box");
+        var listBox = document.querySelector("#rank-list-ctnr-box .tab-content");
         //以下代码为监控整个Body元素的变化
         var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
         if (MutationObserver) {
